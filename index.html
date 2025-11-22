@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secret Santa Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 50px;
+      text-align: center;
+    }
+    .box {
+      background: white;
+      width: 320px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 90%;
+      padding: 8px;
+      margin: 8px 0;
+    }
+    button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      border: none;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2a2a2a;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>🎁 Secret Santa Login 🎁</h2>
+
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+
+  <button onclick="login()">Login</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+  // USER DATA + encoded assignments
+  const users = ["mandy","glenn","kyrene","rong_en","evalyn","yongkit"];
+
+  // STORE PASSWORDS
+  const passwords = {
+    mandy: "mandy123",
+    glenn: "glenn123",
+    kyrene: "kyrene123",
+    rong_en: "rong_en123",
+    evalyn: "evalyn123",
+    yongkit: "yongkit123"
+  };
+
+  // PREGENERATED SECRET SANTA ASSIGNMENTS (ENCODED)
+  // Basic obfuscation using base64 encoding
+  const assignments = {
+    mandy: btoa("glenn"),
+    glenn: btoa("evalyn"),
+    evalyn: btoa("kyrene"),
+    kyrene: btoa("yongkit"),
+    yongkit: btoa("rong_en"),
+    rong_en: btoa("mandy")
+  };
+
+  function login() {
+    const u = document.getElementById("username").value.trim();
+    const p = document.getElementById("password").value.trim();
+    const resultDiv = document.getElementById("result");
+
+    if (!(u in passwords)) {
+      resultDiv.innerHTML = "❌ Invalid username";
+      return;
+    }
+    if (passwords[u] !== p) {
+      resultDiv.innerHTML = "❌ Incorrect password";
+      return;
+    }
+
+    // decode assignment
+    const assignedPerson = atob(assignments[u]);
+
+    resultDiv.innerHTML = `🎄 Hi <b>${u}</b>!<br><br>
+                           You are the Secret Santa for:<br><br>
+                           👉 <span style="font-size:1.5rem;color:#d12">${assignedPerson}</span>`;
+  }
+</script>
+
+</body>
+</html>
